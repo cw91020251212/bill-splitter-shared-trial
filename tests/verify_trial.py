@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""End-to-end smoke/regression test against the deployed Pages + Worker + D1 trial."""
+"""End-to-end smoke/regression test against the trial Worker + D1 app."""
 from __future__ import annotations
 import json, os, secrets, time
 from pathlib import Path
@@ -7,7 +7,7 @@ from urllib.parse import urlsplit
 import requests
 from playwright.sync_api import sync_playwright
 
-SITE = os.environ.get('SITE_URL', 'https://cw91020251212.github.io/bill-splitter-shared-trial/').rstrip('/') + '/'
+SITE = os.environ.get('SITE_URL', 'https://bill-splitter-shared-trial.cw9102025.workers.dev/').rstrip('/') + '/'
 API = os.environ.get('API_URL', 'https://bill-splitter-shared-trial.cw9102025.workers.dev').rstrip('/')
 KEY = os.environ.get('ADMIN_KEY') or Path(os.environ['ADMIN_KEY_FILE']).read_text(encoding='utf-8').strip()
 ORIGIN = f"{urlsplit(SITE).scheme}://{urlsplit(SITE).netloc}"
@@ -57,7 +57,7 @@ check(health.ok and health.json().get('storage') == 'd1-persistent', 'Worker 健
 push_config = session.get(f'{API}/api/push-config', timeout=20).json()
 check(push_config.get('enabled') is True and bool(push_config.get('applicationServerKey')), 'Worker 提供 Web Push 公開設定，私密金鑰不回傳')
 check(session.get(endpoint('sample-dinner','/admin'), timeout=20).status_code == 401, '未認證管理請求遭拒')
-check(session.options(endpoint('sample-dinner','/public'), headers={'Origin':ORIGIN,'Access-Control-Request-Method':'GET'}).status_code == 204, 'GitHub Pages 來源的 CORS 預檢成功')
+check(session.options(endpoint('sample-dinner','/public'), headers={'Origin':ORIGIN,'Access-Control-Request-Method':'GET'}).status_code == 204, '同源試用站的 CORS 預檢成功')
 check(session.options(endpoint('sample-dinner','/public'), headers={'Origin':'https://not-allowed.example','Access-Control-Request-Method':'GET'}).status_code == 403, '其他網站來源遭 CORS 拒絕')
 
 main_id = 'trial-share-' + secrets.token_hex(4)

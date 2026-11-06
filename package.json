@@ -4,8 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "wrangler dev",
-    "deploy:worker": "wrangler deploy",
+    "build:worker-assets": "node scripts/build-worker-assets.mjs",
+    "dev": "npm run build:worker-assets && wrangler dev",
+    "deploy:worker": "npm run build:worker-assets && wrangler deploy",
     "test:e2e": "python3 tests/verify_trial.py",
     "test:webpush": "node tests/verify_webpush_payload.mjs",
     "generate:vapid": "node scripts/generate-vapid.mjs"

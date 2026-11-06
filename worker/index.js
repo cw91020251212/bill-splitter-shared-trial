@@ -1,5 +1,6 @@
 import { buildPushPayload } from '@block65/webcrypto-web-push';
 import { resultNotification } from './push-message.js';
+import { STATIC_ASSETS } from './static-assets.js';
 
 const SAMPLE_ID = 'sample-dinner';
 const MAX_BODY = 64 * 1024;
@@ -27,6 +28,27 @@ function json(request, env, status, value) {
 }
 function fail(request, env, status, code, message) {
   return json(request, env, status, { error: code, message });
+}
+function staticAssetResponse(request, url) {
+  if (request.method !== 'GET' && request.method !== 'HEAD') {
+    return new Response('Method Not Allowed', { status: 405, headers: { Allow: 'GET, HEAD', 'Cache-Control': 'no-store' } });
+  }
+  const path = url.pathname === '/' ? '/index.html' : url.pathname;
+  const asset = STATIC_ASSETS[path];
+  if (!asset) return new Response('Not found', { status: 404, headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' } });
+  const body = asset.base64
+    ? Uint8Array.from(atob(asset.base64), character => character.charCodeAt(0))
+    : asset.text;
+  const headers = new Headers({
+    'Content-Type': asset.contentType,
+    'Cache-Control': path === '/index.html' ? 'no-cache' : 'public, max-age=300',
+    'X-Content-Type-Options': 'nosniff',
+    'Referrer-Policy': 'no-referrer',
+    'X-Frame-Options': 'DENY',
+    'Cross-Origin-Resource-Policy': 'same-origin',
+  });
+  if (path === '/service-worker.js') headers.set('Service-Worker-Allowed', '/');
+  return new Response(request.method === 'HEAD' ? null : body, { status: 200, headers });
 }
 function clone(value) { return structuredClone(value); }
 function safeEqual(a, b) {
@@ -506,6 +528,7 @@ async function handleApi(request, env, url, ctx) {
 
 export default {
   async fetch(request, env, ctx) {
+    const url = new URL(request.url);
     const origin = request.headers.get('Origin');
     if (origin && origin !== env.ALLOWED_ORIGIN) return fail(request, env, 403, 'origin_not_allowed', '此網站不允許連接共用帳單 API');
     if (request.method === 'OPTIONS') {
@@ -513,8 +536,7 @@ export default {
       return new Response(null, { status: 204, headers: corsHeaders(request, env) });
     }
     try {
-      const url = new URL(request.url);
-      if (!url.pathname.startsWith('/api/') && url.pathname !== '/healthz') return fail(request, env, 404, 'not_found', '找不到 API 路徑');
+      if (!url.pathname.startsWith('/api/') && url.pathname !== '/healthz') return staticAssetResponse(request, url);
       return await handleApi(request, env, url, ctx);
     } catch (error) {
       console.error('request failed', String(error?.message || error));
