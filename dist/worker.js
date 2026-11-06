@@ -1054,7 +1054,7 @@ setInterval(async () => {
 // worker/index.js
 var SAMPLE_ID = "sample-dinner";
 var MAX_BODY = 64 * 1024;
-var PIN_ITERATIONS = 12e4;
+var PIN_ITERATIONS = 1e5;
 function corsHeaders(request, env) {
   const origin = request.headers.get("Origin");
   const headers = {

@@ -4,7 +4,7 @@ import { STATIC_ASSETS } from './static-assets.js';
 
 const SAMPLE_ID = 'sample-dinner';
 const MAX_BODY = 64 * 1024;
-const PIN_ITERATIONS = 120000;
+const PIN_ITERATIONS = 100000; // Cloudflare Workers Web Crypto maximum.
 
 function corsHeaders(request, env) {
   const origin = request.headers.get('Origin');
