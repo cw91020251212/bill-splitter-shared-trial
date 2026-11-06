@@ -1,0 +1,11 @@
+node_modules/
+.wrangler/
+.dev.vars
+.env
+*.log
+.DS_Store
+.local-admin-key
+.local-test-site/
+tests/verification-results.json
+__pycache__/
+*.py[cod]

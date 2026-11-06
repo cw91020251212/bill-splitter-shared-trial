@@ -1,0 +1,23 @@
+{
+  "name": "bill-splitter-shared-trial",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy:worker": "wrangler deploy",
+    "test:e2e": "python3 tests/verify_trial.py",
+    "test:webpush": "node tests/verify_webpush_payload.mjs",
+    "generate:vapid": "node scripts/generate-vapid.mjs"
+  },
+  "dependencies": {
+    "@block65/webcrypto-web-push": "^2.0.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.128.0"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "workerd@1.20261104.1": true
+  }
+}

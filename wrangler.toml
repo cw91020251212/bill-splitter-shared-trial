@@ -1,0 +1,16 @@
+name = "bill-splitter-shared-trial"
+main = "worker/index.js"
+compatibility_date = "2026-11-06"
+workers_dev = true
+
+[vars]
+ALLOWED_ORIGIN = "https://cw91020251212.github.io"
+PUBLIC_APP_URL = "https://cw91020251212.github.io/bill-splitter-shared-trial/"
+VAPID_SUBJECT = "https://cw91020251212.github.io/bill-splitter-shared-trial/"
+VAPID_PUBLIC_KEY = ""
+
+[[d1_databases]]
+binding = "DB"
+database_name = "bill_splitter_shared_trial"
+database_id = "2f8567d5-7932-4b50-a51a-c24f162a50b0"
+migrations_dir = "worker/migrations"

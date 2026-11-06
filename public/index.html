@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-Hant-HK">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f5f8f6">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="分帳管家">
+  <meta name="api-base" content="https://bill-splitter-shared-trial.cw9102025.workers.dev">
+  <meta name="description" content="分帳管家共用測試版">
+  <title>分帳管家｜共用測試版</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icon.png">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <main class="shell">
+    <div class="topline">
+      <a class="brand" href="./?bill=sample-dinner" aria-label="分帳管家首頁">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" role="img"><rect x="5" y="3" width="14" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 7h8M8.5 11h1m5 0h1m-6 4h1m5 0h1m-6 3h1m5 0h1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        <span>分帳管家</span>
+      </a>
+      <div class="top-actions">
+        <span class="state-badge" id="stateBadge">填寫中</span>
+        <button class="role-button" id="friendTab" type="button" hidden>朋友頁</button>
+      </div>
+    </div>
+    <header class="hero">
+      <p class="eyebrow" id="categoryTag">週末聚餐</p>
+      <h1 id="screenTitle">填寫你的分帳</h1>
+      <p class="hero-copy" id="screenCopy">選擇名字，加入自己的項目與份量。</p>
+    </header>
+    <p class="connection-status" id="connectionStatus" role="status" aria-live="polite">正在連接共用帳單…</p>
+    <section id="friendView" aria-label="朋友分帳"></section>
+    <section id="managerView" class="hidden" aria-label="管理者專用"></section>
+    <footer class="foot"><span>虛構資料 · 共用試用版</span><span>帳單存於共用伺服器</span></footer>
+  </main>
+  <dialog class="confirm-dialog" id="deleteConfirmDialog" aria-labelledby="deleteConfirmTitle" aria-describedby="deleteConfirmCopy" aria-modal="true">
+    <div class="confirm-panel">
+      <p class="confirm-kicker">刪除確認</p>
+      <h2 class="confirm-title" id="deleteConfirmTitle">確定要刪除？</h2>
+      <p class="confirm-copy" id="deleteConfirmCopy"></p>
+      <div class="confirm-actions"><button class="button secondary" id="cancelDelete" type="button" autofocus>保留</button><button class="button danger" id="confirmDelete" type="button">刪除</button></div>
+    </div>
+  </dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
